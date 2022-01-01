@@ -111,7 +111,8 @@ plugins:
   - ircquery                                # 允許查詢 IRC 的一些訊息
   - irccommand                              # 允許向 IRC 發送一些命令（注意，不是 IRC 命令而是給頻道內機器人使用的命令）
   - pia
-  - scpper                                  # 啟用基於 Crom API 的 SCP 維基查詢功能
+  # - scpper                                # 啟用基於 Crom API 的 SCP 維基查詢功能
+  # - hitokoto                              # 一言（hitokoto.cn）隨機句子功能
 
 # 各插件（套件）设置
 transport:
@@ -334,3 +335,16 @@ scpper:
   #   - "qq/12345678"
   command: "!search"                        # 查詢指令
   branch: "cn"                              # 通過 Crom API 搜索時默認的分部編號
+
+hitokoto:
+  disables:                                 # 不要在這些群組使用一言功能
+    - "qq/12345678"
+
+  # 如果是只希望在特定群組使用，用這個
+  # enables:
+  #  - "qq/12345678"
+
+  alias:                                    # 觸發一言的命令名和別名
+    - "一言"
+  
+  api: "https://v1.hitokoto.cn/"            # 一言 API 地址，如果自建一言服務請設置
