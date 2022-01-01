@@ -31,11 +31,11 @@ module.exports = (pluginManager, options) => {
 
     let alias = options.alias || ['!h'];
 
-    for(command in alias){
-      bridge.addCommand(command[i], async (context) => {
+    for(let command in alias){
+      bridge.addCommand(alias[command], async (context) => {
         let res;
         if(context.param=="help"){
-          context.reply(`用法：${command} [類型（可選）：${c.keys().join('|')}]`);
+          context.reply(`用法：${alias[command]} [類型（可選）：${c.keys().join('|')}]`);
         } else if(context.param && c.keys().includes(context.param)){
           res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
         } else {
