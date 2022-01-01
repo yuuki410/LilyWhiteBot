@@ -10,7 +10,8 @@
 'use strict';
 
 const format = require('string-format');
-const crom = require('./scpper/crom.js');
+const CromApi = require('./scpper/crom.js');
+const crom = new CromApi();
 
 const branch = {
   "wl": "http://wanderers-library.wikidot.com",
@@ -37,21 +38,26 @@ module.exports = (pluginManager, options) => {
 
     let command = options.command || '!search';
 
-    bridge.addCommand(command, (context) => {
+    bridge.addCommand(command, async (context) => {
       if(context.param){
+        let site = options.branch; // TODO: 允許按分部查詢
         let res = await crom.searchPages(context.param, {
           anyBaseUrl: !!site&&!!branch[site] ? branch[site] : branch[options.branch]
         });
-        let ans = res.wikidotInfo ? res.wikidotInfo.title : '' ;
-        ans += ans && res.alternateTitles.length ? ' - ' : '';
-        ans += res.alternateTitles.length ? res.alternateTitles[0].title : '';
-        ans += !ans && res.translationOf && res.translationOf.wikidotInfo ? res.translationOf.wikidotInfo.title : '';
-        ans += res.wikidotInfo ? `\n評分：${res.wikidotInfo.rating}` : '' ;
-        ans += res.url ? `\n網址：${res.url}` : '';
+        let ans = "";
+        if(res.data.searchPages[0]){
+          res=res.data.searchPages[0];
+          ans = res.wikidotInfo ? res.wikidotInfo.title : '' ;
+          ans += ans && res.alternateTitles.length ? ' - ' : '';
+          ans += res.alternateTitles.length ? res.alternateTitles[0].title : '';
+          ans += !ans && res.translationOf && res.translationOf.wikidotInfo ? res.translationOf.wikidotInfo.title : '';
+          ans += res.wikidotInfo ? `\n評分：${res.wikidotInfo.rating}` : '' ;
+          ans += res.url ? `\n網址：${res.url}` : '';
+        }
         if(!!ans){
           context.reply(ans);
         } else {
-          context.reply("無結果")
+          context.reply("無結果");
         }
       } else {
         context.reply(`用法： ${command} 頁面標題`);
