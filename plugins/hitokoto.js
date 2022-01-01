@@ -29,17 +29,19 @@ const c = {
 module.exports = (pluginManager, options) => {
     const bridge = pluginManager.plugins.transport;
 
-    let command = options.command || '!h';
+    let alias = options.alias || ['!h'];
 
-    bridge.addCommand(command, async (context) => {
-      let res;
-      if(context.param=="help"){
-        context.reply(`用法：${command} [類型（可選）：${c.keys().join('|')}]`);
-      } else if(context.param && c.keys().includes(context.param)){
-        res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
-      } else {
-        res = await got.get("https://v1.hitokoto.cn/").json();
-      }
-      context.reply(`${res.hitokoto} ——${res.from_who}《${res.from}》`);
-    }, options);
+    for(command in alias){
+      bridge.addCommand(command[i], async (context) => {
+        let res;
+        if(context.param=="help"){
+          context.reply(`用法：${command} [類型（可選）：${c.keys().join('|')}]`);
+        } else if(context.param && c.keys().includes(context.param)){
+          res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
+        } else {
+          res = await got.get("https://v1.hitokoto.cn/").json();
+        }
+        context.reply(`${res.hitokoto} ——${res.from_who}《${res.from}》`);
+      }, options);
+    }
 };
