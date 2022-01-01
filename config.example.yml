@@ -62,11 +62,13 @@ QQ:
 
     # 以下為[OICQ](https://github.com/takayama-lily/oicq)參數
     passwordMd5: ""                         # 使用MD5進行加密後的QQ密碼，並不儲存明文
-    platform: 2                             # 登陆类型 1手机 2平板
+    platform: 2                             # 登陆类型 1-手机 2-平板 3-手表 4-MacOS 5-iPad
     logLevel: "warn"                         # 日志级别，有trace,debug,info,warn,error,fatal,off
     kickoff: false                          # 被挤下线是否在3秒后反挤对方
     ignoreSelf: true                        # 群聊是否无视自己的发言
     devicePath: "./data/"                   # 设备文件保存路径，默认为启动文件同目录下的data文件夹
+    reconnInterval: 5                       # 重连间隔秒数，默认5(秒)，不建议设置低于3(秒)，0则不会自动重连
+    autoServer: true                        # 自动选择最优服务器，关闭后会一直使用`msfwifi.3g.qq.com`进行连接
 
     # 以下参数用于与 Mirai 及 CQHTTP Mirai 插件连接，需要和其设置一致
     # 酷Q 及 CoolQ HTTP API 插件已停运
@@ -251,10 +253,11 @@ transport:
     # imgur：将图片上传到 imgur.com。
     # sm.ms：将图片上传到 sm.ms 图床中。
     #
-    # 以下三个需自建服务器：
+    # 以下需自建服务器：
     # self：将文件保存在自己的服务器中。请确保您的服务器设置正确，URL 能够正常访问，否则将无法发送图片。
     # linx：将文件上传到一个 linx（https://github.com/andreimarcu/linx-server）服务器中，支持所有文件格式。
     # uguu: 将文件上传到一个 uguu（https://github.com/nokonoko/Uguu）服务器中。
+    # lsky: 將檔案上傳到一個 lsky（https://github.com/wisp-x/lsky-pro）伺服器中
     #
     # 特别提醒：
     # 1. vim-cn、sm.ms 为个人图床，资源有限。如果您的聊天群水量很大，请选择其他图床或自建服务器。
@@ -274,6 +277,11 @@ transport:
 
       # type为uguu时有效
       uguuApiUrl: ""                        # 请以 /api.php?d=upload-tool 结尾
+      
+      # type为lsky时有效
+      lsky:
+        apiUrl: ""                          # 請使用 /api/upload 結尾
+        token: ""
 
       # type为imgur时有效
       imgur:

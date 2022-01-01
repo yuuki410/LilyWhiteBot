@@ -13,6 +13,7 @@ const path = require('path');
 const request = require('request');
 const sharp = require('sharp');
 const winston = require('winston');
+const fileType = require('file-type');
 
 let options = {};
 let servemedia;
@@ -45,7 +46,7 @@ const generateFileName = (url, name) => {
 const convertFileType = (type) => {
     switch (type) {
         case 'sticker':
-            return 'photo';
+            return 'image';
         case 'voice':
             return 'audio';
         case 'video':
@@ -75,7 +76,7 @@ const getFileStream = (file) => {
     }
 
     // Telegram默认使用webp格式，转成png格式以便让其他聊天软件的用户查看
-    if ((file.type === 'sticker' || file.type === 'photo') && path.extname(filePath) === '.webp') {
+    if ((file.type === 'sticker' || file.type === 'image') && path.extname(filePath) === '.webp') {
         // if (file.type === 'sticker' && servemedia.stickerMaxWidth !== 0) {
         //     // 缩小表情包尺寸，因容易刷屏
         //     fileStream = fileStream.pipe(sharp().resize(servemedia.stickerMaxWidth || 256).png());
@@ -133,8 +134,12 @@ const uploadToHost = (host, file) => new Promise((resolve, reject) => {
     let buf = []
     pendingFileStream
         .on('data', d => buf.push(d))
-        .on('end', () => {
+        .on('end', async () => {
             let pendingFile = Buffer.concat(buf);
+            if (!path.extname(name)) {
+              let type = await fileType.fromBuffer(pendingFile);
+              if (type) name += '.' + type.ext;
+            }
 
             switch (host) {
                 case 'vim-cn':
@@ -195,7 +200,22 @@ const uploadToHost = (host, file) => new Promise((resolve, reject) => {
                         randomname: 'true'
                     };
                     break;
-
+                    
+                case 'lsky':
+                    requestOptions.url = servemedia.lsky.apiUrl;
+                    if (servemedia.lsky.token) {
+                        requestOptions.headers.token = servemedia.lsky.token;
+                    }
+                    requestOptions.formData = {
+                        image: {
+                            value: pendingFile,
+                            options: {
+                                filename: name,
+                            }
+                        },
+                    };
+                    break;
+                    
                 default:
                     reject(new Error('Unknown host type'));
             }
@@ -205,6 +225,7 @@ const uploadToHost = (host, file) => new Promise((resolve, reject) => {
                     callback();
                 }
                 if (!error && response.statusCode === 200) {
+                    if (typeof body === 'string') body = JSON.parse(body);
                     switch (host) {
                         case 'vim-cn':
                         case 'vimcn':
@@ -226,6 +247,13 @@ const uploadToHost = (host, file) => new Promise((resolve, reject) => {
                                 reject(new Error(`Imgur return: ${body.data.error}`));
                             } else {
                                 resolve(body.data.link);
+                            }
+                            break;
+                        case 'lsky':
+                            if (body && body.code !== 200) {
+                                reject(new Error(`Lsky return: ${body.msg}`));
+                            } else {
+                                resolve(body.data.url);
                             }
                             break;
                     }
@@ -270,13 +298,14 @@ const uploadFile = async (file) => {
         case 'vim-cn':
         case 'uguu':
         case 'Uguu':
+        case 'lsky':
             url = await uploadToHost(servemedia.type, file);
             break;
 
         case 'sm.ms':
         case 'imgur':
             // 公共图床只接受图片，不要上传其他类型文件
-            if (fileType === 'photo') {
+            if (fileType === 'image') {
                 url = await uploadToHost(servemedia.type, file);
             }
             break;
