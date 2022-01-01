@@ -109,6 +109,7 @@ plugins:
   - ircquery                                # 允許查詢 IRC 的一些訊息
   - irccommand                              # 允許向 IRC 發送一些命令（注意，不是 IRC 命令而是給頻道內機器人使用的命令）
   - pia
+  - scpper                                  # 啟用基於 Crom API 的 SCP 維基查詢功能
 
 # 各插件（套件）设置
 transport:
@@ -305,3 +306,23 @@ irccommand:
   #  - "qq/12345678"
 
   prefix: "irc"                             # 如果使用，命令會變成 /irctopic、/ircnames 等
+
+scpper:
+  disallowedClients:                        # 在下列平臺禁用
+    - "qq"
+    - "discord"
+    - "telegram"
+    - "irc"
+  # 僅在下列平臺啟用，會覆蓋上面的設置
+  # allowedClients:
+  #   - "qq"
+  #   - "discord"
+  #   - "telegram"
+  #   - "irc"
+  disables:                                 # 在下列群組禁用
+    - "qq/12345678"
+  # 僅在下列群組啟用，會覆蓋上面的設置
+  # enables:
+  #   - "qq/12345678"
+  command: "!search"                        # 查詢指令
+  branch: "cn"                              # 通過 Crom API 搜索時默認的分部編號
