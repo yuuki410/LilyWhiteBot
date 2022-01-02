@@ -26,6 +26,14 @@ const c = {
   "抖机灵": "l",
 };
 
+const cs = ( (c) => {
+  let ans = [];
+  for(i in c){
+    ans.push(i);
+  }
+  return ans;
+})
+
 module.exports = (pluginManager, options) => {
     const bridge = pluginManager.plugins.transport;
 
@@ -35,8 +43,8 @@ module.exports = (pluginManager, options) => {
       bridge.addCommand(alias[command], async (context) => {
         let res;
         if(context.param=="help"){
-          context.reply(`用法：${alias[command]} [類型（可選）：${c.keys().join('|')}]`);
-        } else if(context.param && c.keys().includes(context.param)){
+          context.reply(`用法：${alias[command]} [類型（可選）：${cs.join('|')}]`);
+        } else if(context.param && cs.includes(context.param)){
           res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
         } else {
           res = await got.get("https://v1.hitokoto.cn/").json();

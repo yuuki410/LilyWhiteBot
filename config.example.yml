@@ -111,6 +111,7 @@ plugins:
   - ircquery                                # 允許查詢 IRC 的一些訊息
   - irccommand                              # 允許向 IRC 發送一些命令（注意，不是 IRC 命令而是給頻道內機器人使用的命令）
   - pia
+  - restart                                 # 允許通過命令重啟或關閉機器人，需要在插件設置中指定操作員
   # - scpper                                # 啟用基於 Crom API 的 SCP 維基查詢功能
   # - hitokoto                              # 一言（hitokoto.cn）隨機句子功能
 
@@ -315,6 +316,12 @@ irccommand:
   #  - "qq/12345678"
 
   prefix: "irc"                             # 如果使用，命令會變成 /irctopic、/ircnames 等
+
+restart:
+  command: "!restart"                       # 命令
+  operators:                                # 設置操作員，注意格式要寫完整
+    - "qq/12345678"                         # 操作員的QQ號
+    - "irc/operator"                        # 操作員的Nick
 
 scpper:
   disallowedClients:                        # 在下列平臺禁用
