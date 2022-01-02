@@ -111,7 +111,7 @@ module.exports = (pluginManager, options) => {
     bridge.addCommand(commandSearchUserByRank, async (context) => {
       if(context.param){
         let site = options.branch;
-        let res = await crom.searchUserByRank(context.param, {
+        let res = await crom.searchUserByRank(parseInt(context.param), {
           anyBaseUrl: !!branch[site] ? branch[site] : branch[options.branch],
           baseUrl: !!branch[site] ? branch[site] : branch[options.branch]
         });
