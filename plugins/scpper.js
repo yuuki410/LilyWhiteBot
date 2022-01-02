@@ -9,7 +9,6 @@
 
 'use strict';
 
-const format = require('string-format');
 const CromApi = require('./scpper/crom.js');
 const crom = new CromApi();
 const BridgeMsg = require('./transport/BridgeMsg.js');
@@ -38,12 +37,14 @@ module.exports = (pluginManager, options) => {
     const bridge = pluginManager.plugins.transport;
 
     let command = options.command || '!search';
+    let commandSearchUser = options.commandSearchUser || '!author';
+    let commandSearchUserByRank = options.commandSearchUserByRank || '!rank';
 
     bridge.addCommand(command, async (context) => {
       if(context.param){
         let site = options.branch; // TODO: 允許按分部查詢
         let res = await crom.searchPages(context.param, {
-          anyBaseUrl: !!site&&!!branch[site] ? branch[site] : branch[options.branch]
+          anyBaseUrl: !!branch[site] ? branch[site] : branch[options.branch]
         });
         let ans = "";
         if(res.data.searchPages[0]){
@@ -70,6 +71,74 @@ module.exports = (pluginManager, options) => {
         }
       } else {
         context.reply(`用法： ${command} 頁面標題`);
+      }
+    }, options);
+
+    bridge.addCommand(commandSearchUser, async (context) => {
+      if(context.param){
+        let site = options.branch;
+        let res = await crom.searchUsers(context.param, {
+          anyBaseUrl: !!branch[site] ? branch[site] : branch[options.branch],
+          baseUrl: !!branch[site] ? branch[site] : branch[options.branch]
+        });
+        if (site&&site==="all") { filter.anyBaseUrl=null; filter.baseUrl=null; };
+        let ans = "";
+        if(res.data.searchUsers[0]){
+          res=res.data.searchUsers[0];
+          ans = res.name;
+          ans += `: ${(site==="all"||!!branch[site]) ? site.toUpperCase() : config.scpSite.toUpperCase()} #${res.statistics.rank}`;
+          ans += `\n共 ${res.statistics.pageCount} 頁面，總評分 ${res.statistics.totalRating}，平均分 ${res.statistics.meanRating}`;
+          ans += res.authorInfos.length ? `\n作者頁：${res[0].authorInfos[0].authorPage.url}` : '';
+        }
+        if(!!ans){
+          context.reply(ans);
+          
+          // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見掀桌
+          if (bridge && !context.isPrivate) {
+            bridge.send(new BridgeMsg(context, {
+                text: `${ans}`,
+                isNotice: true,
+            }));
+          }
+        } else {
+          context.reply("無結果");
+        }
+      } else {
+        context.reply(`用法： ${commandSearchUser} 用户名`);
+      }
+    }, options);
+
+    bridge.addCommand(commandSearchUserByRank, async (context) => {
+      if(context.param){
+        let site = options.branch;
+        let res = await crom.searchUserByRank(context.param, {
+          anyBaseUrl: !!branch[site] ? branch[site] : branch[options.branch],
+          baseUrl: !!branch[site] ? branch[site] : branch[options.branch]
+        });
+        if (site&&site==="all") { filter.anyBaseUrl=null; filter.baseUrl=null; };
+        let ans = "";
+        if(res.data.usersByRank[0]){
+          res=res.data.usersByRank[0];
+          ans = res.name;
+          ans += `: ${(site==="all"||!!branch[site]) ? site.toUpperCase() : config.scpSite.toUpperCase()} #${res.statistics.rank}`;
+          ans += `\n共 ${res.statistics.pageCount} 頁面，總評分 ${res.statistics.totalRating}，平均分 ${res.statistics.meanRating}`;
+          ans += res.authorInfos.length ? `\n作者頁：${res[0].authorInfos[0].authorPage.url}` : '';
+        }
+        if(!!ans){
+          context.reply(ans);
+          
+          // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見掀桌
+          if (bridge && !context.isPrivate) {
+            bridge.send(new BridgeMsg(context, {
+                text: `${ans}`,
+                isNotice: true,
+            }));
+          }
+        } else {
+          context.reply("無結果");
+        }
+      } else {
+        context.reply(`用法： ${commandSearchUser} 用户名`);
       }
     }, options);
 };
