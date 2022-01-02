@@ -88,7 +88,7 @@ module.exports = (pluginManager, options) => {
           ans = res.name;
           ans += `: ${(site==="all"||!!branch[site]) ? site.toUpperCase() : config.scpSite.toUpperCase()} #${res.statistics.rank}`;
           ans += `\n共 ${res.statistics.pageCount} 頁面，總評分 ${res.statistics.totalRating}，平均分 ${res.statistics.meanRating}`;
-          ans += res.authorInfos.length ? `\n作者頁：${res[0].authorInfos[0].authorPage.url}` : '';
+          ans += res.authorInfos.length ? `\n作者頁：${res.authorInfos[0].authorPage.url}` : '';
         }
         if(!!ans){
           context.reply(ans);
@@ -104,7 +104,7 @@ module.exports = (pluginManager, options) => {
           context.reply("無結果");
         }
       } else {
-        context.reply(`用法： ${commandSearchUser} 用户名`);
+        context.reply(`用法： ${commandSearchUser} 用戶名`);
       }
     }, options);
 
@@ -122,7 +122,7 @@ module.exports = (pluginManager, options) => {
           ans = res.name;
           ans += `: ${(site==="all"||!!branch[site]) ? site.toUpperCase() : config.scpSite.toUpperCase()} #${res.statistics.rank}`;
           ans += `\n共 ${res.statistics.pageCount} 頁面，總評分 ${res.statistics.totalRating}，平均分 ${res.statistics.meanRating}`;
-          ans += res.authorInfos.length ? `\n作者頁：${res[0].authorInfos[0].authorPage.url}` : '';
+          ans += res.authorInfos.length ? `\n作者頁：${res.authorInfos[0].authorPage.url}` : '';
         }
         if(!!ans){
           context.reply(ans);
@@ -138,7 +138,7 @@ module.exports = (pluginManager, options) => {
           context.reply("無結果");
         }
       } else {
-        context.reply(`用法： ${commandSearchUser} 用户名`);
+        context.reply(`用法： ${commandSearchUser} 排名（數字）`);
       }
     }, options);
 };
