@@ -12,6 +12,7 @@
 const format = require('string-format');
 const CromApi = require('./scpper/crom.js');
 const crom = new CromApi();
+const BridgeMsg = require('./transport/BridgeMsg.js');
 
 const branch = {
   "wl": "http://wanderers-library.wikidot.com",
@@ -56,6 +57,14 @@ module.exports = (pluginManager, options) => {
         }
         if(!!ans){
           context.reply(ans);
+          
+          // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見掀桌
+          if (bridge && !context.isPrivate) {
+            bridge.send(new BridgeMsg(context, {
+                text: `${ans}`,
+                isNotice: true,
+            }));
+          }
         } else {
           context.reply("無結果");
         }

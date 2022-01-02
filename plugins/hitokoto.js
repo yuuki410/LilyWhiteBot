@@ -10,6 +10,7 @@
 'use strict';
 
 const got = require('got');
+const BridgeMsg = require('./transport/BridgeMsg.js');
 
 const c = {
   "动画": "a",
@@ -26,14 +27,6 @@ const c = {
   "抖机灵": "l",
 };
 
-const cs = ( (c) => {
-  let ans = [];
-  for(i in c){
-    ans.push(i);
-  }
-  return ans;
-})
-
 module.exports = (pluginManager, options) => {
     const bridge = pluginManager.plugins.transport;
 
@@ -42,14 +35,27 @@ module.exports = (pluginManager, options) => {
     for(let command in alias){
       bridge.addCommand(alias[command], async (context) => {
         let res;
-        if(context.param=="help"){
-          context.reply(`用法：${alias[command]} [類型（可選）：${cs.join('|')}]`);
-        } else if(context.param && cs.includes(context.param)){
-          res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
+        if(context.param.replace(' ','') == "help"){
+          context.reply(`用法：${alias[command]} [類型（可選）：${Object.keys(c).join('|')}]`);
         } else {
-          res = await got.get("https://v1.hitokoto.cn/").json();
+          if(Object.keys(c).includes(context.param.replace(' ',''))){
+            res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
+          } else {
+            res = await got.get("https://v1.hitokoto.cn/").json();
+          }
+
+          let ans = `${res.hitokoto}${!!res.from_who || !!res.from ? `  ——${!!res.from_who ? res.from_who : ""}${!!res.from ? `《${res.from}》` : ""}` : ""}`;
+          context.reply(ans);
+
+          // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見一言
+          if (bridge && !context.isPrivate) {
+            bridge.send(new BridgeMsg(context, {
+                text: ans,
+                isNotice: true,
+            }));
+          }
         }
-        context.reply(`${res.hitokoto} ——${res.from_who}《${res.from}》`);
+
       }, options);
     }
 };
