@@ -22,7 +22,7 @@ module.exports = (pluginManager, options) => {
         context.reply("開始重新啟動");
         process.exit();
       } else {
-        context.reply("您沒有操作員權限");
+        context.reply(`您沒有操作員權限，当前的操作员是${options.operators.join(', ')}`);
       }
     }, options);
 };
