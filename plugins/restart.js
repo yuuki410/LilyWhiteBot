@@ -10,8 +10,6 @@
 
 'use strict';
 
-const format = require('string-format');
-
 module.exports = (pluginManager, options) => {
     const bridge = pluginManager.plugins.transport;
 
