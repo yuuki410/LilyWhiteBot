@@ -1,2 +1,9 @@
 #!/bin/bash
-while true; do node main.js; done
+while true
+do
+git pull
+git reset --hard HEAD
+npm i
+npm update oicq
+node main.js
+done
