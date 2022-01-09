@@ -14,13 +14,14 @@ module.exports = (pluginManager, options) => {
     const bridge = pluginManager.plugins.transport;
 
     let command = options.command || '!restart';
+    let operators = options.operators || [];
 
     bridge.addCommand(command, async (context) => {
-      if (options.operators.includes(context.from_uid)) {
-        await context.reply("開始重新啟動");
-        process.exit();
-      } else {
+      if (operators.length && !options.operators.includes(context.from_uid)) {
         context.reply(`您沒有操作員權限，当前的操作员是${options.operators.join(', ')}`);
+      } else {
+        context.reply("8秒後開始重新啟動");
+        setTimeout(()=>process.exit(0), 8000);
       }
     }, options);
 };

@@ -1,5 +1,5 @@
 /*
-* Hitokoto.cn
+* Based on <Hitokoto.cn>
 *
 * command: '!h'
 * types: [
@@ -36,7 +36,8 @@ module.exports = (pluginManager, options) => {
       bridge.addCommand(alias[command], async (context) => {
         let res;
         if(context.param.replace(' ','') == "help"){
-          context.reply(`用法：${alias[command]} [類型（可選）：${Object.keys(c).join('|')}]`);
+          context.reply(`用法：${alias[command]} [類型（可選）：${Object.keys(c).join('|')}]
+強力驅動由 <Hitokoto.cn> API`);
         } else {
           if(Object.keys(c).includes(context.param.replace(' ',''))){
             res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
