@@ -18,7 +18,7 @@ module.exports = (pluginManager, options) => {
     let timeout = options.timeout || 20;
 
     bridge.addCommand(command, async (context) => {
-      if (!!operators.length && !operators.includes(context.from_uid)) {
+      if (operators.length > 0 && !operators.includes(context.from_uid)) {
         context.reply(`您沒有操作員權限，当前的操作员是${operators.join(', ')}`);
       } else {
         context.reply(`${timeout}秒後開始重新啟動`);
