@@ -34,23 +34,25 @@ module.exports = (pluginManager, options) => {
 
     for(let command in alias){
       bridge.addCommand(alias[command], async (context) => {
-        let res;
         if(context.param.replace(' ','') == "help"){
           context.reply(`用法：${alias[command]} [類型（可選）：${Object.keys(c).join('|')}]
 強力驅動由 <Hitokoto.cn> API`);
         } else {
-          if(Object.keys(c).includes(context.param.replace(' ',''))){
-            res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
-          } else {
-            res = await got.get("https://v1.hitokoto.cn/").json();
-          }
-
+          let res;
           let ans;
-          if(res.status){
-            ans = Object.toString(res)
-          } else {
+          try {
+            if(Object.keys(c).includes(context.param.replace(' ',''))){
+              res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
+            } else {
+              res = await got.get("https://v1.hitokoto.cn/").json();
+            }
+          } catch(e) {
+            ans = e;
+          }
+          if(!ans){
             ans = `${res.hitokoto}${!!res.from_who || !!res.from ? `  ——${!!res.from_who ? res.from_who : ""}${!!res.from ? `《${res.from}》` : ""}` : ""}`;
           }
+          
           context.reply(ans);
 
           // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見一言

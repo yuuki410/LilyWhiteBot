@@ -15,7 +15,7 @@ module.exports = (pluginManager, options) => {
 
     let command = options.command || '!restart';
     let operators = options.operators || [];
-    let timeout = options.timeout || 15;
+    let timeout = options.timeout || 20;
 
     bridge.addCommand(command, async (context) => {
       if (!!operators.length && !operators.includes(context.from_uid)) {
