@@ -15,13 +15,14 @@ module.exports = (pluginManager, options) => {
 
     let command = options.command || '!restart';
     let operators = options.operators || [];
+    let timeout = options.timeout || 15;
 
     bridge.addCommand(command, async (context) => {
       if (!!operators.length && !operators.includes(context.from_uid)) {
-        context.reply(`您沒有操作員權限，当前的操作员是${options.operators.join(', ')}`);
+        context.reply(`您沒有操作員權限，当前的操作员是${operators.join(', ')}`);
       } else {
-        context.reply("15秒後開始重新啟動");
-        setTimeout(()=>process.exit(0), 15000);
+        context.reply(`${timeout}秒後開始重新啟動`);
+        setTimeout(()=>process.exit(0), timeout * 1000);
       }
     }, options);
 };
