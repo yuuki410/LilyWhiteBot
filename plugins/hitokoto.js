@@ -45,7 +45,12 @@ module.exports = (pluginManager, options) => {
             res = await got.get("https://v1.hitokoto.cn/").json();
           }
 
-          let ans = `${res.hitokoto}${!!res.from_who || !!res.from ? `  ——${!!res.from_who ? res.from_who : ""}${!!res.from ? `《${res.from}》` : ""}` : ""}`;
+          let ans;
+          if(res.status){
+            ans = Object.toString(res)
+          } else {
+            ans = `${res.hitokoto}${!!res.from_who || !!res.from ? `  ——${!!res.from_who ? res.from_who : ""}${!!res.from ? `《${res.from}》` : ""}` : ""}`;
+          }
           context.reply(ans);
 
           // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見一言
