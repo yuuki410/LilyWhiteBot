@@ -17,7 +17,7 @@ module.exports = (pluginManager, options) => {
     let operators = options.operators || [];
 
     bridge.addCommand(command, async (context) => {
-      if (operators.length && !options.operators.includes(context.from_uid)) {
+      if (!!operators.length && !operators.includes(context.from_uid)) {
         context.reply(`您沒有操作員權限，当前的操作员是${options.operators.join(', ')}`);
       } else {
         context.reply("15秒後開始重新啟動");
