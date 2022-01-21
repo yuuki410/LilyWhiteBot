@@ -44,7 +44,9 @@ module.exports = (pluginManager, options) => {
             if(Object.keys(c).includes(context.param.replace(' ',''))){
               res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
             } else {
-              res = await got.get("https://v1.hitokoto.cn/").json();
+              ans = `啊哈哈，佐祐理不清楚
+或許汝應該試試這些參數：
+${Object.keys(c).join('，')}`;
             }
           } catch(e) {
             ans = e;
