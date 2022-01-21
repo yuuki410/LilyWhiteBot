@@ -41,7 +41,9 @@ module.exports = (pluginManager, options) => {
           let res;
           let ans;
           try {
-            if(Object.keys(c).includes(context.param.replace(' ',''))){
+            if(!context.param.replace(' ','')){
+              res = await got.get(`https://v1.hitokoto.cn/`).json();
+            } else if(Object.keys(c).includes(context.param.replace(' ',''))){
               res = await got.get(`https://v1.hitokoto.cn/?c=${c[context.param]}`).json();
             } else {
               ans = `啊哈哈，佐祐理不清楚
