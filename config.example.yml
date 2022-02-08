@@ -69,6 +69,7 @@ QQ:
     devicePath: "./data/"                   # 设备文件保存路径，默认为启动文件同目录下的data文件夹
     reconnInterval: 5                       # 重连间隔秒数，默认5(秒)，不建议设置低于3(秒)，0则不会自动重连
     autoServer: true                        # 自动选择最优服务器，关闭后会一直使用`msfwifi.3g.qq.com`进行连接
+    online_status: 11                       # 在线状态 11-我在线上 31-离开 41-隐身 50-忙碌 60-Q我吧 70-请勿打扰
 
     # 以下参数用于与 Mirai 及 CQHTTP Mirai 插件连接，需要和其设置一致
     # 酷Q 及 CoolQ HTTP API 插件已停运
@@ -94,7 +95,8 @@ Discord:
     token: ""
   options:
     nickStyle: nickname                     # 可取「nickname」（使用者暱稱，僅在伺服器有效，否則仍用使用者名稱）、「username」（使用者名稱）、「id」（ID）
-    useProxyURL: false                      # 考虑到中国网络情况，若 https://cdn.discordapp.com 被屏蔽请改成 true（对应 https://media.discordapp.net）
+    # apiRoot: https://discord.api.proxy/   # 若 https://cdn.discordapp.com 被無法訪問，请取消此條註釋並填入 https://media.discordapp.net
+                                            # 若仍不可用，請自行架設反向代理（例如使用 Cloudflare Worker）
     relayEmoji: true                        # 轉發時附帶自定義表情圖片，如為否只轉發表情名稱
 
 # 系统日志
@@ -105,6 +107,7 @@ logging:
 # 启用的插件（繁体字用户叫套件）
 plugins:
   - transport                               # 啟用互聯功能，不想禁止互聯的話請勿移除
+  - about                                   # 提供許可信息，需要設置存儲庫地址、許可證文本地址、fork來源（可選）
   - qqmultimsg                              # 允許私聊查詢 QQ 的合併轉發消息
   - groupid-tg                              # 取得目前 Telegram 群組的 ID，
                                             # 可在正式連接之前啟用該套件，然後在 Telegram 群中使用 /thisgroupid 取得ID
@@ -114,8 +117,13 @@ plugins:
   - restart                                 # 允許通過命令重啟或關閉機器人，需要在插件設置中指定操作員
   # - scpper                                # 啟用基於 Crom API 的 SCP 維基查詢功能
   # - hitokoto                              # 一言（hitokoto.cn）隨機句子功能
+  # - menu                                  # 供娛樂用的虛擬菜單
 
 # 各插件（套件）设置
+about:
+  repository: "https://github.com/yuuki410/LilyWhiteBot"
+  license: "https://github.com/yuuki410/LilyWhiteBot/blob/master/LICENSE"
+  fork: "https://github.com/Zokhoi/LilyWhiteBot" # 若不需要請將此項設置爲 false
 transport:
   # 說明：
   # 1. 可以填任意個群組
@@ -357,3 +365,34 @@ hitokoto:
     - "一言"
   
   api: "https://v1.hitokoto.cn/"            # 一言 API 地址，如果自建一言服務請設置
+
+menu:
+  database:                                 # 數據庫設置
+    type: json                              # 可選擇的數據庫類型暫時只有：json
+    json:                                   # 使用json時設置
+      file: ./menu.json                     # 文件保存路徑
+    mysql:                                  # /* TODO */ 使用mysql時請設置
+      host: 'localhost'                     # 數據庫訪問地址，若部署在本地則填localhost
+      user: 'username'                      # 數據庫用戶名
+      password: 'password'                  # 用戶密碼
+      database: 'data'                      # 數據庫名
+    sqlite:                                 # /* TODO */
+      file: ./menu.db                       # 數據庫文件路徑
+  
+  commands:                                 # 命令
+    - "!menu"
+    - "菜单"
+    - "菜單"
+
+  operators:                                # 設置操作員，注意格式要寫完整
+    - "qq/12345678"                         # 操作員的QQ號
+    - "irc/operator"                        # 操作員的Nick
+  
+  disables:                                 # 不要在這些群組使用
+    - "qq/12345678"
+
+  # 如果是只希望在特定群組使用，用這個
+  # enables:
+  #  - "qq/12345678"
+
+  private: true                             # 允許私聊

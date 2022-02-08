@@ -22,6 +22,7 @@
         "oicq": "^1.21.3",
         "request": "~2.88.2",
         "sharp": "^0.25.2",
+        "sqlite3": "^5.0.2",
         "string-format": "^2.0.0",
         "telegraf": "^3.38.0",
         "wechat4u": "^0.7.7",

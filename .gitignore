@@ -55,3 +55,8 @@ badwords.yaml
 badwords.js
 badwords.json
 /data/
+
+# Plugin
+## Menu
+menu.json
+menu.db
