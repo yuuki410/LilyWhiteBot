@@ -3,22 +3,24 @@ LilyWhiteBot
 在多个群组间传话的机器人。原名为“qq-tg-irc”。
 
 ## 关于QQ的重要说明
-2020年7月22日，晨风机器人作者被警方喝茶，随后酷Q作者迫于压力跑路。
-
-目前可行的备选方案为 [OICQ](https://github.com/takayama-lily/oicq) 或 [Mirai](https://github.com/mamoe/mirai)/[CQHTTP Mirai](https://github.com/yyuueexxiinngg/cqhttp-mirai)。
+目前可用的QQ机器人方案有：
+* [OICQ](https://github.com/takayama-lily/oicq)
+* [Mirai](https://github.com/mamoe/mirai)/[CQHTTP Mirai](https://github.com/yyuueexxiinngg/cqhttp-mirai)。
 
 ## 功能
 * QQ（实验性）、Telegram、IRC、Discord 等多组聊天群之间互联。
 * 可根据需要配置单向互联，或者将同一聊天软件的多个分群互联到一起。
 * 支持图片转发。如不能发送图片（IRC），程序可将图片上传到图床并提供图片链接。
 * 支持自定义转发消息样式。
-* 支持 Docker 部署。
+* ~~支持 Docker 部署。~~（暂不提供支持）
 * 可支持扩展（备注：目前接口尚不完善，请尽量避免自己写插件）。
 
 ## 部署操作指南
 ### 准备机器人账号
 #### QQ（实验性支持）
 由于全新的 QQ 号无法直接进群，故建议提前两周注册 QQ 账号，并保持在线。尽量实名注册并绑定手机，以免在触发验证时无法验证账号。
+
+另外请时刻注意OICQ或Mirai的更新，以免协议过旧被检测封号。
 
 #### Telegram
 1. 与 @BotFather 私聊，输入`/newbot`命令，按照屏幕指示进行操作，创建机器人账号。
@@ -43,15 +45,15 @@ IRC 不需要注册。为了提高安全性，您可以采取注册 Nick、增�
 4. 在专用手机上挂机三周，以规避风控。
 -->
 
-### 配置互联程序（Docker）
+### ~~配置互联程序（Docker）~~（暂不提供支持）
 推荐在 Docker 中运行互联机器人程序。具体配置方法见 [Docker说明](https://github.com/Zokhoi/LilyWhiteBot/blob/master/README_Docker.md)。
 
 ### 配置互联程序（手工操作）
 #### 配置 LilyWhiteBot
-1. 安装 Node.js，最小版本 12。
+1. 安装 Node.js，最小版本 14。
 2. 下载代码
 ```
-git clone https://github.com/Zokhoi/LilyWhiteBot
+git clone https://github.com/yuuki410/LilyWhiteBot
 ```
 3. 修改配置文件：
     * 将 config.example.yml 改名为 config.yml，按照配置文件中的提示填入参数。默认情况下各机器人都是关闭的，您需要将需要的机器人的 `disabled` 改为 `false`。
@@ -73,7 +75,7 @@ node main.js
 ### 从其他版本升级
 如果您从其他版本升级，请注意以下三点：
 
-1. Node.js 最低版本为 12。
+1. Node.js 最低版本为 14。
 2. 配置文件格式由 json 换成了 yaml。json 配置文件仍然可用，但您会收到一条警告信息。
 3. 程序不再支持酷 Q。
 
