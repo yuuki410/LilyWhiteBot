@@ -48,8 +48,8 @@ ${  plugins.includes('about') ? `\nabout: 提供許可信息
 }${ plugins.includes('restart') ? `\nrestart: 重新啟動機器人
     ${ pluginManager.config.restart.command || '!restart' }` : ''
 }${ plugins.includes('scpper') ? `\nscpper: 查詢SCP維基（默認分部：${ pluginManager.config.scpper.branch }）
-    ${ pluginManager.config.scpper.command || '!search' }
-    ${ pluginManager.config.scpper.commandSearchUser || '!author' }
+    ${ pluginManager.config.scpper.command || '!search' } [分部代码]
+    ${ pluginManager.config.scpper.commandSearchUser || '!author' } [分部代码]
     ${ pluginManager.config.scpper.commandSearchUserByRack || '!rank' }` : ''
 }${ plugins.includes('hitokoto') ? `\nhitokoto: 一言（於其後加入help可獲取幫助）${ (()=>{
         if(pluginManager.config.hitokoto.alias){
