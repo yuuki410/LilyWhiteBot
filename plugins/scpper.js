@@ -48,15 +48,19 @@ module.exports = (pluginManager, options) => {
         });
         let ans = "";
         if(res.data.searchPages[0]){
-          res=res.data.searchPages[0];
-          ans = res.wikidotInfo ? res.wikidotInfo.title : '' ;
-          ans += ans && res.alternateTitles.length ? ' - ' : '';
-          ans += res.alternateTitles.length ? res.alternateTitles[0].title : '';
-          ans += !ans && res.translationOf && res.translationOf.wikidotInfo ? res.translationOf.wikidotInfo.title : '';
-          ans += res.wikidotInfo ? `\n評分：${res.wikidotInfo.rating}` : '' ;
-          ans += res.url ? `\n網址：${res.url}` : '';
+          let page=res.data.searchPages[0];
+          ans = page.wikidotInfo ? page.wikidotInfo.title : '' ;
+          ans += ans && page.alternateTitles.length ? ' - ' : '';
+          ans += page.alternateTitles.length ? page.alternateTitles[0].title : '';
+          ans += !ans && page.translationOf && page.translationOf.wikidotInfo ? page.translationOf.wikidotInfo.title : '';
+          ans += page.wikidotInfo ? `\n評分：${page.wikidotInfo.rating}` : '' ;
+          ans += page.url ? `\n網址：${page.url}` : '';
         }
-        if(!!ans){
+        ans += `\n其它相近的结果：`;
+        for(let i=1; i<res.data.searchPages.length; i++){
+          ans += `${res.data.searchPages[i].wikidotInfo.title}, `;
+        }
+        if(!!res.data.searchPages.length){
           context.reply(ans);
           
           // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見掀桌
@@ -84,13 +88,17 @@ module.exports = (pluginManager, options) => {
         if (site&&site==="all") { filter.anyBaseUrl=null; filter.baseUrl=null; };
         let ans = "";
         if(res.data.searchUsers[0]){
-          res=res.data.searchUsers[0];
-          ans = res.name;
-          ans += `: ${(site==="all"||!!branch[site]) ? site.toUpperCase() : config.scpSite.toUpperCase()} #${res.statistics.rank}`;
-          ans += `\n共 ${res.statistics.pageCount} 頁面，總評分 ${res.statistics.totalRating}，平均分 ${res.statistics.meanRating}`;
-          ans += res.authorInfos.length ? `\n作者頁：${res.authorInfos[0].authorPage.url}` : '';
+          let user=res.data.searchUsers[0];
+          ans = user.name;
+          ans += `: ${(site==="all"||!!branch[site]) ? site.toUpperCase() : config.scpSite.toUpperCase()} #${user.statistics.rank}`;
+          ans += `\n共 ${user.statistics.pageCount} 頁面，總評分 ${user.statistics.totalRating}，平均分 ${user.statistics.meanRating}`;
+          ans += user.authorInfos.length ? `\n作者頁：${user.authorInfos[0].authorPage.url}` : '';
         }
-        if(!!ans){
+        ans += `\n其它相近的结果：`;
+        for(let i=1; i<res.data.searchUsers.length; i++){
+          ans += `${res.data.searchUsers[i].name}, `;
+        }
+        if(!!res.data.searchUsers.length){
           context.reply(ans);
           
           // 如果開啟了互聯，而且是在公開群組中使用本命令，那麼讓其他群也看見掀桌
