@@ -119,9 +119,10 @@ module.exports = (pluginManager, options) => {
           }
           if(res.data.searchUsers.length>1){
             ans += `\n其它相近的结果：`;
-            for(let i=1; i<res.data.searchUsers.length; i++){
+            for(let i=1; i<res.data.searchUsers.length-1; i++){
               ans += `${res.data.searchUsers[i].name}, `;
             }
+            ans += `${res.data.searchUsers[res.data.searchUsers.length-1].name}`;
           }
           context.reply(ans);
           
