@@ -318,6 +318,11 @@ const uploadFile = async (file) => {
             url = await uploadToLinx(file)
             break;
 
+        case 'source':
+            // 直接使用原網址
+            url = file.url;
+            break;
+
         default:
 
     }
