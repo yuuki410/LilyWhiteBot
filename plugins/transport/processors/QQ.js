@@ -95,13 +95,13 @@ const init = (b, h, c) => {
     qqHandler.on('text', (context) => {
         const send = () => bridge.send(context).catch(() => {});
 
-        // 「應用消息」
-        if (context.from === 1000000 && options.notify.sysmessage) {
-            bridge.send(new BridgeMsg(context, {
-                isNotice: true,
-            }));
-            return;
-        }
+        // // 「應用消息」
+        // if (context.from === 1000000 && options.notify.sysmessage) {
+        //     bridge.send(new BridgeMsg(context, {
+        //         isNotice: true,
+        //     }));
+        //     return;
+        // }
 
         let extra = context.extra;
 
