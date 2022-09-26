@@ -108,11 +108,11 @@ const init = (b, h, c) => {
 
           context.text = context.text.replace(/<:(\w+):(\d*?)>/g, (_, name, id) => {
               if (id && !emojis.filter(v=>v.id===id).length) {emojis.push({name:name, id:id})};
-              return `<emoji: ${name}>`;
+              return `<Emoji: ${name}>`;
           });
           context.text = context.text.replace(/<a:(\w+):(\d*?)>/g, (_, name, id) => {
               if (id && !animated.filter(v=>v.id===id).length) {animated.push({name:name, id:id})};
-              return `<emoji: ${name}>`;
+              return `<Emoji: ${name}>`;
           });
 
           if (!context.extra.files) { context.extra.files = [] }
