@@ -264,7 +264,7 @@ transport:
     # 以下需自建服务器：
     # self：将文件保存在自己的服务器中。请确保您的服务器设置正确，URL 能够正常访问，否则将无法发送图片。
     # linx：将文件上传到一个 linx（https://github.com/andreimarcu/linx-server）服务器中，支持所有文件格式。
-    # uguu: 将文件上传到一个 uguu（https://github.com/nokonoko/Uguu）服务器中。
+    # uguu: 将文件上传到一个 uguu（https://github.com/nokonoko/Uguu）服务器中，也可直接使用开发者自己的图床 uguu.se。
     # lsky: 將檔案上傳到一個 lsky（https://github.com/wisp-x/lsky-pro）伺服器中。
     #
     # 特别提醒：
@@ -282,7 +282,7 @@ transport:
       linxApiUrl: ""                        # linx API 地址（例如 https://www.xxx.com/upload/），通常以斜线结尾
 
       # type为uguu时有效
-      uguuApiUrl: ""                        # 请以 /api.php?d=upload-tool 结尾
+      uguuApiUrl: ""                        # 请以 /upload.php?output=text 结尾
       
       # type为lsky时有效
       lsky:
