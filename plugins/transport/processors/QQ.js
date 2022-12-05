@@ -93,7 +93,7 @@ const init = (b, h, c) => {
      */
     // 將訊息加工好並發送給其他群組
     qqHandler.on('text', (context) => {
-        const send = () => bridge.send(context).catch(() => {});
+        const send = () => bridge.send(context).catch(e => winston.error(e.stack));
 
         // // 「應用消息」
         // if (context.from === 1000000 && options.notify.sysmessage) {
@@ -174,7 +174,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -199,7 +199,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -223,7 +223,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -247,7 +247,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 };

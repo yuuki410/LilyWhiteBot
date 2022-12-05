@@ -57,7 +57,7 @@ const init = (b, h, c) => {
 
     // 將訊息加工好並發送給其他群組
     ircHandler.on('text', (context) => {
-        bridge.send(context).catch(() => {});
+        bridge.send(context).catch(e => winston.error(e.stack));
     });
 
     /*
@@ -80,7 +80,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: ircHandler,
                 _rawdata: message,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -100,7 +100,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: ircHandler,
                 _rawdata: message,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -150,7 +150,7 @@ const init = (b, h, c) => {
                     isNotice: true,
                     handler: ircHandler,
                     _rawdata: rawdata,
-                })).catch(() => {});
+                })).catch(e => winston.error(e.stack));
             }
         }
     });
@@ -177,7 +177,7 @@ const init = (b, h, c) => {
                     isNotice: true,
                     handler: ircHandler,
                     _rawdata: rawdata,
-                })).catch(() => {});
+                })).catch(e => winston.error(e.stack));
             }
 
             if (userlist[nick]) {
