@@ -30,7 +30,7 @@ IRC 不需要注册。为了提高安全性，您可以采取注册 Nick、增�
 
 #### Discord
 1. 进入 [Discord Developer Portal](https://discordapp.com/developers/applications/)，创建 Application。创建完成后记录 CLIENT ID。
-2. 进入 Bot 页面，点击 Add Bot，创建机器人。创建成功后记录 Token。
+2. 进入 Bot 页面，点击 Add Bot，创建机器人。创建成功后记录 Token。找到 Previledged Gateway Intents 并把下面的 SERVER MEMBERS INTENT, MESSAGE CONTENT INTENT 权限打开。
 3. 进入 OAuth2 页面，往下翻到“OAuth2 URL Generator”，找到 SCOPES 并勾选 bot，然后再继续勾选 BOT PERMISSIONS 中的权限（例如 Administrator），系统会生成一个链接。访问生成的链接，按照屏幕提示将机器人拉入到你的服务器与频道中。
 <!--
 #### 微信
@@ -38,9 +38,9 @@ IRC 不需要注册。为了提高安全性，您可以采取注册 Nick、增�
 
 1. 准备专用手机。除机器人账号外，不要登录其他账号。
 2. 启动微信，实名制注册。
-2. 绑定银行卡，并往微信钱包中塞一块钱。
-3. 加三个真实的好友。
-4. 在专用手机上挂机三周，以规避风控。
+3. 绑定银行卡，并往微信钱包中塞一块钱。
+4. 加三个真实的好友。
+5. 在专用手机上挂机三周，以规避风控。
 -->
 
 ### 配置互联程序（Docker）
