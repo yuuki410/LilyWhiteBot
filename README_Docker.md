@@ -32,7 +32,7 @@ mkdir bot
 cd bot
 
 # 互联机器人源码
-git clone https://github.com/Zokhoi/LilyWhiteBot
+git clone https://github.com/Zokhoi/LilyWhiteBot.git
 ```
 
 ## 4. 修改配置文件
@@ -52,27 +52,12 @@ cp badwords.example.yml badwords.yml
 2. 如需转发图片，建议使用图床（`transport.options.servemedia.type`不设置为`self`），因容器取文件比较麻烦。
 
 ### docker-compose.yaml
-在bot目录创建docker-compose.yaml文件，可参照以下配置文件进行设置（注意修改下面的 VNC 密码与机器人 QQ 号）：
+在bot目录创建docker-compose.yaml文件，可参照以下配置文件进行设置：
 
-<i>待更新</i>
-<!-- ```yaml
+```yaml
 version: "3"
 
 services:
-  coolq:
-    image: coolq/wine-coolq
-    restart: always
-    volumes:
-      - ./coolq:/home/user/coolq
-    ports:
-      # 使用9000作为运维端口，HTTP协议
-      - "9000:9000"
-    environment:
-      VNC_PASSWD: VNC密码
-      COOLQ_ACCOUNT: 你的机器人账号
-      # 如果使用酷Q Pro 则需要解除下面的注释
-      # COOLQ_URL: http://dlsec.cqp.me/cqp-full
-
   lilywhitebot:
     image: node:12
     restart: always
@@ -80,7 +65,7 @@ services:
     volumes:
       - ./LilyWhiteBot:/home/node/app
     command: "npm run install-start"
-``` -->
+```
 
 ## 5. 启动
 执行
@@ -98,8 +83,6 @@ docker-compose up -d
 version: "3"
 
 services:
-  # ...
-
   lilywhitebot:
     image: node:12
     restart: always

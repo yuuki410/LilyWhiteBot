@@ -67,7 +67,7 @@ const init = (b, h, c) => {
             }
         }
 
-        bridge.send(context).catch(() => {});
+        bridge.send(context).catch(e => winston.error(e.stack));
     });
 
     tgHandler.on('richmessage', (context) => {
@@ -81,7 +81,7 @@ const init = (b, h, c) => {
             }
         }
 
-        bridge.send(context).catch(() => {});
+        bridge.send(context).catch(e => winston.error(e.stack));
     });
 
     // Pinned message
@@ -95,7 +95,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: tgHandler,
                 _rawdata: ctx,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -120,7 +120,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: tgHandler,
                 _rawdata: ctx,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -141,7 +141,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: tgHandler,
                 _rawdata: ctx,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 };

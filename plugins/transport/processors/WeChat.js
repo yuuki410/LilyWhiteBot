@@ -32,7 +32,7 @@ const init = (b, h, c) => {
      */
     // 將訊息加工好並發送給其他群組
     wechatHandler.on('text', (context) => {
-        bridge.send(context).catch(() => {});
+        bridge.send(context).catch(e => winston.error(e.stack));
     });
 };
 

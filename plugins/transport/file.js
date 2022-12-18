@@ -191,7 +191,7 @@ const uploadToHost = (host, file) => new Promise((resolve, reject) => {
                 case 'Uguu':
                     requestOptions.url = servemedia.uguuApiUrl || servemedia.UguuApiUrl; // 原配置文件以大写字母开头
                     requestOptions.formData = {
-                        file: {
+                        'files[]': {
                             value: pendingFile,
                             options: {
                                 filename: name,
@@ -316,6 +316,11 @@ const uploadFile = async (file) => {
 
         case 'linx':
             url = await uploadToLinx(file)
+            break;
+
+        case 'source':
+            // 直接使用原網址
+            url = file.url;
             break;
 
         default:

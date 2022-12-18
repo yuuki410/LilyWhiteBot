@@ -7,7 +7,7 @@
 IRC:
   disabled: true                            # 如果需要 IRC 机器人，请设置为 false
   bot:
-    server: irc.freenode.net
+    server: irc.libera.chat
     nick: ""                                # IRC 暱稱
     userName: ""
     realName: ""
@@ -54,16 +54,19 @@ Telegram:
     nickStyle: username                     # 在其他群組中如何辨識使用者名稱：可取「username」（優先採用使用者名稱）、
                                             # 「fullname」（優先採用全名）、「firstname」（優先採用 First Name）
 
-# QQ 注意事项：需要和[酷Q](https://cqp.cc)与[CoolQ HTTP API插件](https://cqhttp.cc)配合使用！
+# QQ 注意事项：
+# 可使用外置客戶端如[Mirai](https://github.com/mamoe/mirai)與[OneBot Mirai](https://github.com/yyuueexxiinngg/onebot-kotlin)配合使用；
+# 或使用內置倚賴[OICQ](https://github.com/takayama-lily/oicq)。
+# 推薦使用 OICQ。
 QQ:
   disabled: true                            # 如果需要 QQ 机器人，请设置为 false
   bot:
     qq: "10000"                             # 机器人的 QQ 号
 
-    # 以下為[OICQ](https://github.com/takayama-lily/oicq)參數
+    # 以下為 OICQ 參數
     passwordMd5: ""                         # 使用MD5進行加密後的QQ密碼，並不儲存明文
     platform: 2                             # 登陆类型 1-手机 2-平板 3-手表 4-MacOS 5-iPad
-    logLevel: "warn"                         # 日志级别，有trace,debug,info,warn,error,fatal,off
+    logLevel: "warn"                        # 日志级别，有trace,debug,info,warn,error,fatal,off
     kickoff: false                          # 被挤下线是否在3秒后反挤对方
     ignoreSelf: true                        # 群聊是否无视自己的发言
     devicePath: "./data/"                   # 设备文件保存路径，默认为启动文件同目录下的data文件夹
@@ -71,15 +74,15 @@ QQ:
     autoServer: true                        # 自动选择最优服务器，关闭后会一直使用`msfwifi.3g.qq.com`进行连接
     online_status: 11                       # 在线状态 11-我在线上 31-离开 41-隐身 50-忙碌 60-Q我吧 70-请勿打扰
 
-    # 以下参数用于与 Mirai 及 CQHTTP Mirai 插件连接，需要和其设置一致
+    # 以下参数用于与 Mirai 及 OneBot Mirai 插件连接，需要和其设置一致
     # 酷Q 及 CoolQ HTTP API 插件已停运
-    # 如果使用 OICQ，请删除以下参数
+    # 如果使用 OICQ，请删除或注释以下参数
     apiRoot: "http://127.0.0.1:5700/"
     accessToken: "123"
     secret: "abc"
-    listen:                                 # 用于接收消息，需要同步修改 CQHTTP Mirai 插件中 post_url 参数
+    listen:                                 # 用于接收消息，需要同步修改 OneBot Mirai 插件中 post_url 参数
       host: "127.0.0.1"                     # 使用Docker时请设置成0.0.0.0
-     port: 11234
+      port: 11234
 
   options:
     selfCensorship: true                    # 根据 badwords.yml 文件过滤敏感词
@@ -95,8 +98,9 @@ Discord:
     token: ""
   options:
     nickStyle: nickname                     # 可取「nickname」（使用者暱稱，僅在伺服器有效，否則仍用使用者名稱）、「username」（使用者名稱）、「id」（ID）
-    # apiRoot: https://discord.api.proxy/   # 若 https://cdn.discordapp.com 被無法訪問，请取消此條註釋並填入 https://media.discordapp.net
-                                            # 若仍不可用，請自行架設反向代理（例如使用 Cloudflare Worker）
+    useProxyURL: false                      # 考虑到中国网络情况，若 https://cdn.discordapp.com 被屏蔽请改成 true（对应 https://media.discordapp.net）
+    # apiRoot: "https://discord.com/api"      # 自訂 api endpoint 網址（例如反代網址）
+    # cdnRoot: "https://cdn.discordapp.com"   # 自訂 cdn 網址（例如反代網址）
     relayEmoji: true                        # 轉發時附帶自定義表情圖片，如為否只轉發表情名稱
 
 # 系统日志
@@ -211,7 +215,8 @@ transport:
         join: true                          # 有人加入 QQ 群的話是否提醒其他群組
         leave: true                         # 有人離開 QQ 群的話是否提醒其他群組
         setadmin: true                      # 是否提醒設定/取消管理員
-        # sysmessage: true                  # 是否提醒系統消息，包括禁言和全體禁言 -- 酷Q收不到此类消息，移除
+        ban: true                           # 是否提醒禁言/解禁
+        # sysmessage: true                  # 是否提醒系統消息，包括禁言和全體禁言
         notice: true                        # 发送群公告时是否提醒其他群组
       # 下面是其他群里面互联机器人的QQ。在转发这些机器人的消息时，程序会尝试从消息中提取出真正的昵称，
       # 而不是显示机器人的名称。使用下面 messageStyle 所指定的格式进行解析。
@@ -257,6 +262,9 @@ transport:
     # 本节用于处理图片文件
     #
     # 支持以下几种处理方式：
+    # 
+    # 省略/留空/none：不處理。只顯示「<Image>」或「<圖片>」等文字。
+    # source：直接使用聊天平台提供的圖源。
     #
     # 以下三个是公共图床，仅支持图片，其他类型文件会被忽略：
     # vim-cn：将图片上传到 img.vim-cn.com。
@@ -266,17 +274,15 @@ transport:
     # 以下需自建服务器：
     # self：将文件保存在自己的服务器中。请确保您的服务器设置正确，URL 能够正常访问，否则将无法发送图片。
     # linx：将文件上传到一个 linx（https://github.com/andreimarcu/linx-server）服务器中，支持所有文件格式。
-    # uguu: 将文件上传到一个 uguu（https://github.com/nokonoko/Uguu）服务器中。
-    # lsky: 將檔案上傳到一個 lsky（https://github.com/wisp-x/lsky-pro）伺服器中
+    # uguu: 将文件上传到一个 uguu（https://github.com/nokonoko/Uguu）服务器中，也可直接使用开发者自己的图床 uguu.se。
+    # lsky: 將檔案上傳到一個 lsky（https://github.com/wisp-x/lsky-pro）伺服器中。
     #
     # 特别提醒：
     # 1. vim-cn、sm.ms 为个人图床，资源有限。如果您的聊天群水量很大，请选择其他图床或自建服务器。
     # 2. 如使用外部图床，建议您设置自己专用的 User-Agent。
     # 3. 自建服务器请使用 80 或 443 端口（国内服务器需备案），否则图片可能无法正常转发。
-    #
-    # 另外，如果使用酷 Q 的话，您需要定期自行清理酷 Q 的缓存！
     servemedia:
-      type: ""                              # 文件处理方式：省略/留空/none、self、vim-cn、imgur、sm.ms、linx、uguu
+      type: ""                              # 文件处理方式：省略/留空/none、source、self、vim-cn、imgur、sm.ms、linx、uguu
 
       # type为self时有效
       cachePath: ""                         # 缓存存放位置
@@ -286,7 +292,7 @@ transport:
       linxApiUrl: ""                        # linx API 地址（例如 https://www.xxx.com/upload/），通常以斜线结尾
 
       # type为uguu时有效
-      uguuApiUrl: ""                        # 请以 /api.php?d=upload-tool 结尾
+      uguuApiUrl: ""                        # 请以 /upload.php?output=text 结尾
       
       # type为lsky时有效
       lsky:

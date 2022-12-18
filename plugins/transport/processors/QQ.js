@@ -93,15 +93,15 @@ const init = (b, h, c) => {
      */
     // 將訊息加工好並發送給其他群組
     qqHandler.on('text', (context) => {
-        const send = () => bridge.send(context).catch(() => {});
+        const send = () => bridge.send(context).catch(e => winston.error(e.stack));
 
-        // 「應用消息」
-        if (context.from === 1000000 && options.notify.sysmessage) {
-            bridge.send(new BridgeMsg(context, {
-                isNotice: true,
-            }));
-            return;
-        }
+        // // 「應用消息」
+        // if (context.from === 1000000 && options.notify.sysmessage) {
+        //     bridge.send(new BridgeMsg(context, {
+        //         isNotice: true,
+        //     }));
+        //     return;
+        // }
 
         let extra = context.extra;
 
@@ -174,7 +174,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -199,7 +199,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -223,7 +223,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 
@@ -232,11 +232,21 @@ const init = (b, h, c) => {
      */
     qqHandler.on('ban', (data) => {
         let text = '';
-        if (data.type === 1) {
-            text = `${data.user_target.name} (${data.target}) 被禁言${data.durstr}`;
+        if (data.target === 0) {
+            // 全體禁言
+            if (data.type === 1) {
+                text = "管理員開啟了全體禁言";
+            } else {
+                text = "管理員關閉了全體禁言";
+            }
         } else {
-            text = `${data.user_target.name} (${data.target}) 被解除禁言`;
+            if (data.type === 1) {
+                text = `${data.user_target.name} (${data.target}) 被禁言${data.durstr}`;
+            } else {
+                text = `${data.user_target.name} (${data.target}) 被解除禁言`;
+            }
         }
+        
 
         if (options.notify.ban) {
             bridge.send(new BridgeMsg({
@@ -247,7 +257,7 @@ const init = (b, h, c) => {
                 isNotice: true,
                 handler: qqHandler,
                 _rawdata: data,
-            })).catch(() => {});
+            })).catch(e => winston.error(e.stack));
         }
     });
 };
